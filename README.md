@@ -1,59 +1,183 @@
-# HiberusCompanyEmpsFrontend
+# Gestión de Empleados y Departamentos - Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.12.
+## Descripción
+Aplicación frontend desarrollada en Angular para la gestión de empleados y departamentos de una empresa. Permite realizar operaciones CRUD sobre empleados y departamentos, así como visualizar estadísticas relevantes.
 
-## Development server
+## Tecnologías Utilizadas
+- Angular 17
+- TypeScript
+- Bootstrap 5
+- RxJS
+- Docker
+- Nginx
 
-To start a local development server, run:
+## Requisitos Previos
+- Docker y Docker Compose instalados
+- Git
 
+## Estructura del Proyecto
+```
+hiberus-company-emps-frontend/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── dashboard/
+│   │   │   ├── department-form/
+│   │   │   ├── department-list/
+│   │   │   ├── employee-form/
+│   │   │   └── employee-list/
+│   │   ├── services/
+│   │   │   ├── employee.service.ts
+│   │   │   └── department.service.ts
+│   │   └── models/
+│   ├── environments/
+│   └── assets/
+├── Dockerfile
+├── nginx.conf
+└── docker-compose.yml
+```
+
+## Características Implementadas
+1. **Gestión de Empleados**
+   - Creación de empleados
+   - Listado de empleados
+   - Eliminación de empleados
+   - Visualización de detalles
+
+2. **Gestión de Departamentos**
+   - Creación de departamentos
+   - Listado de departamentos
+   - Eliminación de departamentos
+
+3. **Dashboard**
+   - Empleado con mayor salario
+   - Empleado más joven
+   - Conteo de empleados del último mes
+
+## Instalación y Ejecución
+
+### Opción 1: Ejecución con Docker Compose (Recomendada)
+1. Clonar los repositorios:
+```bash
+# Clonar el repositorio del backend
+git clone <url-repositorio-backend>
+cd management-employees-company
+cd ..
+
+# Clonar el repositorio del frontend (que contiene el docker-compose.yml)
+git clone <url-repositorio-frontend>
+cd hiberus-company-emps-frontend
+```
+
+2. Levantar el entorno completo desde el directorio del frontend:
+```bash
+docker-compose up --build
+```
+
+3. Acceder a la aplicación:
+- Frontend: http://localhost
+- Backend: http://localhost:8080
+- Consola H2: http://localhost:8080/h2-console
+
+### Opción 2: Desarrollo Local
+Si prefieres ejecutar el proyecto en modo desarrollo:
+
+1. Clonar el repositorio:
+```bash
+git clone <url-del-repositorio>
+cd hiberus-company-emps-frontend
+```
+
+2. Instalar dependencias:
+```bash
+npm install
+```
+
+3. Iniciar el servidor de desarrollo:
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+4. Acceder a la aplicación:
+```
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Arquitectura y Diseño
 
-```bash
-ng generate --help
+### Componentes
+- **DashboardComponent**: Muestra estadísticas y métricas clave
+- **EmployeeFormComponent**: Formulario para crear/editar empleados
+- **EmployeeListComponent**: Lista y gestión de empleados
+- **DepartmentFormComponent**: Formulario para crear/editar departamentos
+- **DepartmentListComponent**: Lista y gestión de departamentos
+
+### Servicios
+- **EmployeeService**: Maneja todas las operaciones relacionadas con empleados
+- **DepartmentService**: Maneja todas las operaciones relacionadas con departamentos
+
+### Modelos de Datos
+```typescript
+interface Employee {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+  role?: string;
+  salary: number;
+  startDate: string;
+  endDate: string | null;
+  status: string;
+  departmentId: string;
+}
+
+interface Department {
+  id?: string;
+  name: string;
+  status: string;
+}
 ```
 
-## Building
+## Configuración de Nginx
+El proyecto incluye una configuración de Nginx para servir la aplicación y manejar el proxy inverso hacia el backend:
 
-To build the project run:
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
 
-```bash
-ng build
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /employee {
+        proxy_pass http://backend:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /department {
+        proxy_pass http://backend:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Contribución
+1. Fork el proyecto
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Licencia
+Este proyecto está bajo la Licencia MIT.
