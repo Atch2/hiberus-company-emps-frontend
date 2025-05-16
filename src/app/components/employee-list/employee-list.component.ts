@@ -27,6 +27,7 @@ export class EmployeeListComponent implements OnInit {
   columns = [
     { header: 'Nombre', field: 'firstName' },
     { header: 'Apellido', field: 'lastName' },
+    { header: 'Fecha inicio', field: 'startDate' },
     { header: 'Edad', field: 'age' },
     { header: 'Rol', field: 'role' },
     { header: 'Salario', field: 'salary' },

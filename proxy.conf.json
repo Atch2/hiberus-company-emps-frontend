@@ -1,12 +1,20 @@
 {
-  "/employee/*": {
+  "/employee/**": {
     "target": "http://localhost:8080",
     "secure": false,
-    "changeOrigin": true
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/employee": "/employee"
+    }
   },
-  "/department/*": {
+  "/department/**": {
     "target": "http://localhost:8080",
     "secure": false,
-    "changeOrigin": true
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/department": "/department"
+    }
   }
 } 

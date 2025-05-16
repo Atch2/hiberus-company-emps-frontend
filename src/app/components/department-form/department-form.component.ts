@@ -29,12 +29,12 @@ export class DepartmentFormComponent {
   onSubmit() {
     console.log('onSubmit ejecutado');
     if (this.departmentForm.invalid || this.isSubmitting) {
-      return; // Evita ejecutar el código si el formulario es inválido o ya se está procesando
+      return;
     }
   
-    this.isSubmitting = true; // Desactiva el botón mientras se procesa la solicitud
-    this.error = ''; // Limpia mensajes de error previos
-    this.message = ''; // Limpia mensajes de éxito previos
+    this.isSubmitting = true; 
+    this.error = ''; 
+    this.message = ''; 
   
     const formValue = this.departmentForm.value;
     const department = {
@@ -58,7 +58,7 @@ export class DepartmentFormComponent {
         } else {
           this.error = 'Error al crear departamento: ' + (err.error?.message || err.message || err.statusText);
         }
-        this.isSubmitting = false; // Reactiva el botón incluso si hay error
+        this.isSubmitting = false;
       }
     });
   }

@@ -10,7 +10,7 @@ export interface Employee {
   age: number;
   role?: string;
   salary: number;
-  startDate: string; // Formato: yyyy-MM-dd
+  startDate: string;
   endDate: string | null;
   status: string;
   departmentId: string;
@@ -47,10 +47,19 @@ export class EmployeeService {
   createEmployee(employee: Employee): Observable<{ message: string }> {
     const departmentId = employee.departmentId;
     const { departmentId: _, ...employeeData } = employee;
-    return this.http.post<ApiResponse<{ message: string }>>(`/employee/create/${departmentId}`, employeeData)
+    return this.http.post<ApiResponse<{ message: string }>>(`${this.apiUrl}/create/${departmentId}`, employeeData)
       .pipe(
-        map(response => ({ message: response.data.message || 'Empleado creado con éxito' })),
-        catchError(this.handleError)
+        map(response => {
+          console.log('Respuesta create:', response);
+          if (response.success) {
+            return { message: response.data.message || 'Empleado creado con éxito' };
+          }
+          throw new Error(response.data.message || 'Error al crear el empleado');
+        }),
+        catchError(error => {
+          console.error('Error completo:', error);
+          return throwError(() => new Error(error.error?.message || 'Error al crear el empleado'));
+        })
       );
   }
 
@@ -75,9 +84,17 @@ export class EmployeeService {
   deleteEmployee(id: string): Observable<{ message: string }> {
     return this.http.delete<ApiResponse<{ message: string }>>(`${this.apiUrl}/delete/${id}`)
       .pipe(
-        map(response => ({ message: response.data.message || 'Empleado eliminado con éxito' })),
-        retry(1),
-        catchError(this.handleError)
+        map(response => {
+          console.log('Respuesta delete:', response);
+          if (response.success) {
+            return { message: response.data.message || 'Empleado eliminado con éxito' };
+          }
+          throw new Error(response.data.message || 'Error al eliminar el empleado');
+        }),
+        catchError(error => {
+          console.error('Error eliminando empleado:', error);
+          return throwError(() => new Error(error.error?.message || 'Error al eliminar el empleado'));
+        })
       );
   }
 

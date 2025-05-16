@@ -30,8 +30,17 @@ export class DepartmentService {
   createDepartment(department: Department): Observable<Department> {
     return this.http.post<ApiResponse<Department>>(`${this.apiUrl}/create`, department)
       .pipe(
-        map(response => response.data),
-        catchError(this.handleError)
+        map(response => {
+          console.log('Respuesta create:', response);
+          if (response.success) {
+            return response.data;
+          }
+          throw new Error('Error al crear el departamento');
+        }),
+        catchError(error => {
+          console.error('Error creando departamento:', error);
+          return throwError(() => new Error(error.error?.message || 'Error al crear el departamento'));
+        })
       );
   }
 
@@ -46,8 +55,17 @@ export class DepartmentService {
   deleteDepartment(id: string): Observable<{ message: string }> {
     return this.http.delete<ApiResponse<{ message: string }>>(`${this.apiUrl}/delete/${id}`)
       .pipe(
-        map(response => ({ message: response.data.message || 'Departamento eliminado con éxito' })),
-        catchError(this.handleError)
+        map(response => {
+          console.log('Respuesta delete:', response);
+          if (response.success) {
+            return { message: response.data.message || 'Departamento eliminado con éxito' };
+          }
+          throw new Error(response.data.message || 'Error al eliminar el departamento');
+        }),
+        catchError(error => {
+          console.error('Error eliminando departamento:', error);
+          return throwError(() => new Error(error.error?.message || 'Error al eliminar el departamento'));
+        })
       );
   }
 } 
