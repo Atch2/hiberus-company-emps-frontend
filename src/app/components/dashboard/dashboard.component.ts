@@ -12,30 +12,62 @@ import { HttpClientModule } from '@angular/common/http';
 export class DashboardComponent {
   result = '';
   error = '';
+  isLoading = false;
 
   constructor(private employeeService: EmployeeService) {}
 
   getHighestSalary() {
     this.reset();
+    this.isLoading = true;
     this.employeeService.getHighestSalary().subscribe({
-      next: (res) => (this.result = `Empleado: ${res.name} - Salario: ${res.salary}`),
-      error: (err) => (this.error = 'Error: ' + (err.message || err.statusText)),
+      next: (data) => {
+        if (data && data.employee) {
+          const employee = data.employee;
+          this.result = `Empleado: ${employee.firstName} ${employee.lastName} - Salario: $${data.salary.toFixed(2)}`;
+        } else {
+          this.error = 'No se encontró información del empleado';
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Error al obtener el salario más alto: ' + (err.message || err.statusText);
+        this.isLoading = false;
+      },
     });
   }
 
   getLowestAge() {
     this.reset();
+    this.isLoading = true;
     this.employeeService.getLowestAge().subscribe({
-      next: (res) => (this.result = `Empleado: ${res.name} - Edad: ${res.age}`),
-      error: (err) => (this.error = 'Error: ' + (err.message || err.statusText)),
+      next: (data) => {
+        if (data && data.employee) {
+          const employee = data.employee;
+          this.result = `Empleado: ${employee.firstName} ${employee.lastName} - Edad: ${data.age} años`;
+        } else {
+          this.error = 'No se encontró información del empleado';
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Error al obtener la edad más baja: ' + (err.message || err.statusText);
+        this.isLoading = false;
+      },
     });
   }
 
   getCountLastMonth() {
     this.reset();
+    this.isLoading = true;
     this.employeeService.getCountLastMonth().subscribe({
-      next: (count) => (this.result = `Empleados ingresados último mes: ${count}`),
-      error: (err) => (this.error = 'Error: ' + (err.message || err.statusText)),
+      next: (count) => {
+        this.result = `Empleados ingresados en el último mes: ${count}`;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Error al obtener el conteo de empleados: ' + (err.message || err.statusText);
+        this.isLoading = false;
+      },
     });
   }
 

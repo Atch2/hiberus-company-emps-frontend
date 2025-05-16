@@ -62,8 +62,8 @@ export class EmployeeFormComponent implements OnInit {
     };
     console.log('Empleado a enviar:', employee);
     this.employeeService.createEmployee(employee).subscribe({
-      next: () => {
-        this.message = 'Empleado creado exitosamente.';
+      next: (response) => {
+        this.message = response.message;
         this.employeeForm.reset({ status: 'A' });
       },
       error: (err) => {

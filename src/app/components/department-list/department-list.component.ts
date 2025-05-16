@@ -43,8 +43,8 @@ export class DepartmentListComponent implements OnInit {
   }
 
   onDelete(department: Department) {
-    if (confirm('¿Está seguro de eliminar este departamento?')) {
-      this.departmentService.deleteDepartment(department.id!).subscribe({
+    if (confirm('¿Está seguro de eliminar este departamento?') && department.id) {
+      this.departmentService.deleteDepartment(department.id).subscribe({
         next: () => {
           this.loadDepartments();
         },

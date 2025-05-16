@@ -12,15 +12,41 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
     EmployeeFormComponent,
     DepartmentFormComponent,
     EmployeeListComponent,
     DepartmentListComponent,
     DashboardComponent
   ],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `
+    <div class="container mt-4">
+      <h1 class="mb-4">Gestión de Empleados y Departamentos</h1>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <app-department-form></app-department-form>
+        </div>
+        <div class="col-md-6">
+          <app-employee-form></app-employee-form>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-12">
+          <app-dashboard></app-dashboard>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <app-department-list></app-department-list>
+        </div>
+        <div class="col-md-6">
+          <app-employee-list></app-employee-list>
+        </div>
+      </div>
+    </div>
+  `
 })
 export class AppComponent {
   title = 'hiberus-company-emps-frontend';

@@ -1,12 +1,25 @@
 <div class="p-3 border rounded">
     <h4>Consultas de empleados</h4>
     <div class="mb-3">
-      <button class="btn btn-primary me-2" (click)="getHighestSalary()">Salario más alto</button>
-      <button class="btn btn-primary me-2" (click)="getLowestAge()">Edad más baja</button>
-      <button class="btn btn-primary" (click)="getCountLastMonth()">Empleados ingresados último mes</button>
+      <button class="btn btn-primary me-2" (click)="getHighestSalary()" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Salario más alto
+      </button>
+      <button class="btn btn-primary me-2" (click)="getLowestAge()" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Edad más baja
+      </button>
+      <button class="btn btn-primary" (click)="getCountLastMonth()" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Empleados ingresados último mes
+      </button>
     </div>
   
-    <div *ngIf="result" class="alert alert-info">{{ result }}</div>
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="result" class="alert alert-info">
+      <i class="bi bi-info-circle me-2"></i>{{ result }}
+    </div>
+    <div *ngIf="error" class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    </div>
   </div>
   

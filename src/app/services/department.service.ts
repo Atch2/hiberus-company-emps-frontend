@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry, take } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 export interface Department {
   id?: string;
   name: string;
   status: string;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
 }
 
 @Injectable({
@@ -15,7 +20,7 @@ export interface Department {
 export class DepartmentService {
   private apiUrl = '/department';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private handleError(error: HttpErrorResponse) {
     console.error('Error en la petición:', error);
@@ -23,21 +28,25 @@ export class DepartmentService {
   }
 
   createDepartment(department: Department): Observable<Department> {
-    return this.http.post<Department>(`${this.apiUrl}/create`, department);
-  }
-
-  getAllDepartments(): Observable<Department[]> {
-    return this.http.get<Department[]>(`${this.apiUrl}/departments`)
+    return this.http.post<ApiResponse<Department>>(`${this.apiUrl}/create`, department)
       .pipe(
-        retry(1),
+        map(response => response.data),
         catchError(this.handleError)
       );
   }
 
-  deleteDepartment(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`)
+  getAllDepartments(): Observable<Department[]> {
+    return this.http.get<ApiResponse<Department[]>>(`${this.apiUrl}/departments`)
       .pipe(
-        retry(1),
+        map(response => response.data),
+        catchError(this.handleError)
+      );
+  }
+
+  deleteDepartment(id: string): Observable<{ message: string }> {
+    return this.http.delete<ApiResponse<{ message: string }>>(`${this.apiUrl}/delete/${id}`)
+      .pipe(
+        map(response => ({ message: response.data.message || 'Departamento eliminado con éxito' })),
         catchError(this.handleError)
       );
   }
