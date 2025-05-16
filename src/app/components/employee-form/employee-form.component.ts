@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService, Employee } from '../../services/employee.service';
+import { DepartmentService, Department } from '../../services/department.service';
 
 @Component({
   selector: 'app-employee-form',
@@ -9,13 +10,17 @@ import { EmployeeService, Employee } from '../../services/employee.service';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './employee-form.component.html',
 })
-export class EmployeeFormComponent {
+export class EmployeeFormComponent implements OnInit {
   employeeForm;
-
+  departments: Department[] = [];
   message = '';
   error = '';
 
-  constructor(private fb: FormBuilder, private employeeService: EmployeeService) {
+  constructor(
+    private fb: FormBuilder,
+    private employeeService: EmployeeService,
+    private departmentService: DepartmentService
+  ) {
     this.employeeForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -26,6 +31,13 @@ export class EmployeeFormComponent {
       endDate: [''],
       status: ['A', [Validators.required, Validators.pattern(/^[AI]$/)]],
       departmentId: [null, Validators.required],
+    });
+  }
+
+  ngOnInit() {
+    this.departmentService.getAllDepartments().subscribe({
+      next: (data) => this.departments = data,
+      error: (err) => this.error = 'Error cargando departamentos: ' + (err.message || err.statusText)
     });
   }
 
@@ -40,14 +52,15 @@ export class EmployeeFormComponent {
     const employee: Employee = {
       firstName: formValue.firstName!,
       lastName: formValue.lastName!,
-      age: formValue.age!,
+      age: Number(formValue.age!),
       role: formValue.role || undefined,
-      salary: formValue.salary!,
+      salary: Number(formValue.salary!),
       startDate: formValue.startDate!,
       endDate: formValue.endDate || null,
       status: formValue.status!,
       departmentId: formValue.departmentId!
     };
+    console.log('Empleado a enviar:', employee);
     this.employeeService.createEmployee(employee).subscribe({
       next: () => {
         this.message = 'Empleado creado exitosamente.';

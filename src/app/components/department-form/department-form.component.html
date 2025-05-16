@@ -3,7 +3,7 @@
     <h5 class="card-title mb-0">Registro de Departamento</h5>
   </div>
   <div class="card-body">
-    <form [formGroup]="departmentForm" (ngSubmit)="onSubmit($event)">
+    <form [formGroup]="departmentForm">
       <div class="mb-3">
         <label for="name" class="form-label">Nombre del Departamento *</label>
         <input id="name" class="form-control" formControlName="name"
@@ -23,7 +23,7 @@
       </div>
 
       <div class="d-grid gap-2">
-        <button class="btn btn-primary" type="submit" [disabled]="departmentForm.invalid || isSubmitting">
+        <button class="btn btn-primary" type="button" (click)="onSubmit()" [disabled]="departmentForm.invalid || isSubmitting">
           <span *ngIf="!isSubmitting">
             <i class="bi bi-building-add me-2"></i>Crear Departamento
           </span>

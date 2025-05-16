@@ -76,15 +76,16 @@
 
         <div class="col-md-6 mb-3">
           <label for="departmentId" class="form-label">Departamento *</label>
-          <input
+          <select
             id="departmentId"
-            type="number"
-            class="form-control"
+            class="form-select"
             formControlName="departmentId"
             [class.is-invalid]="employeeForm.get('departmentId')?.invalid && employeeForm.get('departmentId')?.touched"
-            placeholder="Ingrese el ID del departamento"
-          />
-          <div class="invalid-feedback">ID de departamento es obligatorio</div>
+          >
+            <option value="" disabled selected>Seleccione un departamento</option>
+            <option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
+          </select>
+          <div class="invalid-feedback">Debe seleccionar un departamento</div>
         </div>
       </div>
 

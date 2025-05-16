@@ -26,30 +26,26 @@ export class DepartmentFormComponent {
     });
   }
 
-  onSubmit(event?: Event) {
-    console.log('onSubmit called', event);
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  onSubmit() {
+    console.log('onSubmit ejecutado');
     if (this.departmentForm.invalid || this.isSubmitting) {
-      return;
+      return; // Evita ejecutar el código si el formulario es inválido o ya se está procesando
     }
-
-    this.isSubmitting = true;
-    this.error = '';
-    this.message = '';
-
+  
+    this.isSubmitting = true; // Desactiva el botón mientras se procesa la solicitud
+    this.error = ''; // Limpia mensajes de error previos
+    this.message = ''; // Limpia mensajes de éxito previos
+  
     const formValue = this.departmentForm.value;
-    const department: Department = {
-      name: formValue.name!,
-      status: formValue.status!
+    const department = {
+      name: formValue.name ?? '',
+      status: formValue.status ?? ''
     };
-
+  
     this.departmentService.createDepartment(department).subscribe({
       next: () => {
         this.message = 'Departamento creado exitosamente.';
-        this.departmentForm.reset({ status: 'A' });
+        this.departmentForm.reset({ name: '', status: 'A' });
         this.departmentForm.markAsPristine();
         this.departmentForm.markAsUntouched();
         this.isSubmitting = false;
@@ -62,13 +58,13 @@ export class DepartmentFormComponent {
         } else {
           this.error = 'Error al crear departamento: ' + (err.error?.message || err.message || err.statusText);
         }
-        this.isSubmitting = false;
+        this.isSubmitting = false; // Reactiva el botón incluso si hay error
       }
     });
   }
 
   resetForm() {
-    this.departmentForm.reset({ status: 'A' });
+    this.departmentForm.reset({ status: 'A', name: '' });
     this.departmentForm.markAsPristine();
     this.departmentForm.markAsUntouched();
     this.message = '';

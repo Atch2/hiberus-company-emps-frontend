@@ -23,11 +23,7 @@ export class DepartmentService {
   }
 
   createDepartment(department: Department): Observable<Department> {
-    return this.http.post<Department>(`${this.apiUrl}/create`, department).pipe(
-      take(1),
-      retry(1),
-      catchError(this.handleError)
-    );
+    return this.http.post<Department>(`${this.apiUrl}/create`, department);
   }
 
   getAllDepartments(): Observable<Department[]> {
