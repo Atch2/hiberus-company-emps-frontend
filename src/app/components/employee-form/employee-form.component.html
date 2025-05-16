@@ -1,0 +1,142 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h5 class="card-title mb-0">Registro de Empleado</h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="firstName" class="form-label">Nombres *</label>
+          <input
+            id="firstName"
+            class="form-control"
+            formControlName="firstName"
+            [class.is-invalid]="employeeForm.get('firstName')?.invalid && employeeForm.get('firstName')?.touched"
+            placeholder="Ingrese los nombres"
+          />
+          <div class="invalid-feedback">Nombre es obligatorio</div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="lastName" class="form-label">Apellidos *</label>
+          <input
+            id="lastName"
+            class="form-control"
+            formControlName="lastName"
+            [class.is-invalid]="employeeForm.get('lastName')?.invalid && employeeForm.get('lastName')?.touched"
+            placeholder="Ingrese los apellidos"
+          />
+          <div class="invalid-feedback">Apellido es obligatorio</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="age" class="form-label">Edad *</label>
+          <input
+            id="age"
+            type="number"
+            class="form-control"
+            formControlName="age"
+            [class.is-invalid]="employeeForm.get('age')?.invalid && employeeForm.get('age')?.touched"
+            placeholder="Ingrese la edad"
+          />
+          <div class="invalid-feedback">
+            Edad debe ser entre 18 y 65 años
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="role" class="form-label">Rol</label>
+          <input 
+            id="role" 
+            class="form-control" 
+            formControlName="role"
+            placeholder="Ingrese el rol" 
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="salary" class="form-label">Salario *</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input
+              id="salary"
+              type="number"
+              class="form-control"
+              formControlName="salary"
+              [class.is-invalid]="employeeForm.get('salary')?.invalid && employeeForm.get('salary')?.touched"
+              placeholder="Ingrese el salario"
+            />
+            <div class="invalid-feedback">Salario debe ser positivo</div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="departmentId" class="form-label">Departamento *</label>
+          <input
+            id="departmentId"
+            type="number"
+            class="form-control"
+            formControlName="departmentId"
+            [class.is-invalid]="employeeForm.get('departmentId')?.invalid && employeeForm.get('departmentId')?.touched"
+            placeholder="Ingrese el ID del departamento"
+          />
+          <div class="invalid-feedback">ID de departamento es obligatorio</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="startDate" class="form-label">Fecha de Ingreso *</label>
+          <input
+            id="startDate"
+            type="date"
+            class="form-control"
+            formControlName="startDate"
+            [class.is-invalid]="employeeForm.get('startDate')?.invalid && employeeForm.get('startDate')?.touched"
+          />
+          <div class="invalid-feedback">Fecha válida es requerida</div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="endDate" class="form-label">Fecha de Salida</label>
+          <input 
+            id="endDate" 
+            type="date" 
+            class="form-control" 
+            formControlName="endDate" 
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="status" class="form-label">Estado *</label>
+        <select id="status" class="form-select" formControlName="status">
+          <option value="A">Activo</option>
+          <option value="I">Inactivo</option>
+        </select>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary" type="submit" [disabled]="employeeForm.invalid">
+          <i class="bi bi-person-plus-fill me-2"></i>Crear Empleado
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-3">
+      <div *ngIf="message" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" (click)="message = ''"></button>
+      </div>
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" (click)="error = ''"></button>
+      </div>
+    </div>
+  </div>
+</div>
+  

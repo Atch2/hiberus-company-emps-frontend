@@ -1,0 +1,49 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h5 class="card-title mb-0">Registro de Departamento</h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="departmentForm" (ngSubmit)="onSubmit($event)">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre del Departamento *</label>
+        <input id="name" class="form-control" formControlName="name"
+          [class.is-invalid]="departmentForm.get('name')?.invalid && departmentForm.get('name')?.touched"
+          placeholder="Ingrese el nombre del departamento" [attr.disabled]="isSubmitting ? '' : null" />
+        <div class="invalid-feedback">
+          El nombre es obligatorio y debe tener entre 2 y 50 caracteres
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="status" class="form-label">Estado *</label>
+        <select id="status" class="form-select" formControlName="status" [attr.disabled]="isSubmitting ? '' : null">
+          <option value="A">Activo</option>
+          <option value="I">Inactivo</option>
+        </select>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary" type="submit" [disabled]="departmentForm.invalid || isSubmitting">
+          <span *ngIf="!isSubmitting">
+            <i class="bi bi-building-add me-2"></i>Crear Departamento
+          </span>
+          <span *ngIf="isSubmitting">
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Creando...
+          </span>
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-3">
+      <div *ngIf="message" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" (click)="resetForm()"></button>
+      </div>
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" (click)="error = ''"></button>
+      </div>
+    </div>
+  </div>
+</div>

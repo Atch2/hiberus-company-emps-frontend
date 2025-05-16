@@ -1,0 +1,12 @@
+<div class="p-3 border rounded">
+    <h4>Consultas de empleados</h4>
+    <div class="mb-3">
+      <button class="btn btn-primary me-2" (click)="getHighestSalary()">Salario más alto</button>
+      <button class="btn btn-primary me-2" (click)="getLowestAge()">Edad más baja</button>
+      <button class="btn btn-primary" (click)="getCountLastMonth()">Empleados ingresados último mes</button>
+    </div>
+  
+    <div *ngIf="result" class="alert alert-info">{{ result }}</div>
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  </div>
+  
